@@ -13,7 +13,7 @@ resource "google_service_account" "soner_service_account" {
 resource "google_compute_instance" "default" {
   name         = "test-terraform"
   machine_type = "e2-medium"
-  zone         = "europe-west1-b"
+  zone         = "europe-west1"
 
 
   tags = ["terraform", "provided"]
