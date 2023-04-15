@@ -1,7 +1,7 @@
 provider "google" {
   project     = "serious-terra-383815"
   region      = "europe-west1"
-  zone        = "europe-west1"
+  zone        = "europe-west1-b"
 }
 
 resource "google_service_account" "soner_service_account" {
@@ -13,7 +13,7 @@ resource "google_service_account" "soner_service_account" {
 resource "google_compute_instance" "default" {
   name         = "test-terraform"
   machine_type = "e2-medium"
-  zone         = "europe-west1"
+  zone         = "europe-west1-b"
 
 
   tags = ["terraform", "provided"]
