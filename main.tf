@@ -1,7 +1,7 @@
 provider "google" {
   project     = "serious-terra-383815"
   region      = "europe-west1"
-  zone        = "europe-west1-b"
+  zone        = "europe-west1"
 }
 
 resource "google_service_account" "soner_service_account" {
