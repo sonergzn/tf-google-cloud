@@ -12,24 +12,21 @@ resource "google_service_account" "soner_service_account" {
 }
 resource "google_compute_instance" "default" {
   name         = "test-terraform"
-  machine_type = "e2-medium"
+  machine_type = "e2-micro"
   zone         = "europe-west1-b"
 
 
   tags = ["terraform", "provided"]
 
   boot_disk {
+    auto_delete = false
     initialize_params {
       image = "debian-cloud/debian-11"
+      
       labels = {
         purposes = "testing"
       }
     }
-  }
-
-  // Local SSD disk
-  scratch_disk {
-    interface = "SCSI"
   }
 
   network_interface {
