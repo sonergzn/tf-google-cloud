@@ -20,6 +20,7 @@ resource "google_service_account" "soner_service_account" {
   project      = var.gcloud_project_name
   #email        = "soner.gzn@outlook.com"
 }
+
 resource "google_compute_instance" "default" {
   name         = "test-terraform"
   machine_type = "e2-micro"
