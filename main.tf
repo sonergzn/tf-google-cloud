@@ -1,3 +1,4 @@
+
 provider "google" {
   project     = var.gcloud_project_name
   region      = var.regions_europe[0]

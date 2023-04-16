@@ -1,19 +1,6 @@
-#input Variables file.
+#variable.tf are files where all variables are declared; these might or might not have a default value.
+#variable.tfvars are files where the variables are provided/assigned a value.
 
-variable "regions_europe" {
-    type        = list(string)
-    default     = ["europe-west1", "europe-west2"]
-    description = "List of regions in Europa"
-}
-
-variable "gcloud_project_name" {
-    type      = string
-    default   = "serious-terra-383815"
-    sensitive = true
-}
-
-variable "organization_name"{
-    type      = string 
-    default   = "SONER_ORG"
-    sensitive = true
-}
+regions_europe = ["europe-west1", "europe-west2"]
+gcloud_project_name = "serious-terra-383815"
+organization_name = "SONER_ORG"
