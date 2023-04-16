@@ -1,13 +1,22 @@
 provider "google" {
-  project     = "serious-terra-383815"
-  region      = "europe-west1"
+  project     = var.gcloud_project_name
+  region      = var.regions_europe[0]
   zone        = "europe-west1-b"
+}
+
+terraform {
+    backend "remote"{
+        organization = "SONER_ORG"
+        workspaces {
+            name = "tf-google-cloud"
+        }
+    }
 }
 
 resource "google_service_account" "soner_service_account" {
   account_id   = "tfserviceaccount"
   display_name = "Soner Service Account"
-  project      = "serious-terra-383815"
+  project      = var.gcloud_project_name
   #email        = "soner.gzn@outlook.com"
 }
 resource "google_compute_instance" "default" {
