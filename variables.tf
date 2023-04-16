@@ -7,6 +7,11 @@ variable "regions_europe" {
     description = "List of regions in Europa"
 }
 
+variable "google_zone"{
+    type = string 
+    default = "europe-west1-b"
+}
+
 variable "gcloud_project_name" {
     type      = string
     default   = "serious-terra-383815"

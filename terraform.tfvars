@@ -4,3 +4,4 @@
 regions_europe = ["europe-west1", "europe-west2"]
 gcloud_project_name = "serious-terra-383815"
 organization_name = "SONER_ORG"
+google_zone = ""

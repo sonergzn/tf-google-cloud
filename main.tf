@@ -25,7 +25,10 @@ resource "google_compute_instance" "micro_google_VM" {
   name         = "test-terraform"
   machine_type = "e2-micro"
   zone         = "europe-west1-b"
-
+  
+  lifecycle {
+  prevent_destroy = true
+    }
 
   tags = ["terraform", "provided"]
 
