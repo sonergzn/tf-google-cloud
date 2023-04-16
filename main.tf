@@ -21,7 +21,7 @@ resource "google_service_account" "soner_service_account" {
   #email        = "soner.gzn@outlook.com"
 }
 
-resource "google_compute_instance" "default" {
+resource "google_compute_instance" "micro_google_VM" {
   name         = "test-terraform"
   machine_type = "e2-micro"
   zone         = "europe-west1-b"
