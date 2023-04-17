@@ -1,3 +1,12 @@
+module "outputs" {
+  source = "./modules"
+}
+
+data "google_secret_manager_secret_version" "project_id" {
+  #provider   = google
+  secret     = "project_id"
+  version    = "latest"
+}
 
 provider "google" {
   project     = var.gcloud_project_name
@@ -17,8 +26,7 @@ terraform {
 resource "google_service_account" "soner_service_account" {
   account_id   = "tfserviceaccount"
   display_name = "Soner Service Account"
-  project      = var.gcloud_project_name
-  #email        = "soner.gzn@outlook.com"
+  project      = data.google_secret_manager_secret_version.project_id.secret_data
 }
 
 resource "google_compute_instance" "micro_google_VM" {
