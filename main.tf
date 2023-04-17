@@ -63,7 +63,7 @@ resource "google_compute_instance" "micro_google_VM" {
 #################### GKE ########################
 
 resource "google_container_cluster" "primary" {
-  name     = "tf-k8-cluster"
+  name     = "tfk8cluster"
   location = var.regions_europe[3]
 
   # We can't create a cluster with no node pool defined, but we want to only use
@@ -84,7 +84,7 @@ resource "google_container_node_pool" "primarypreemptiblesnodes" {
     preemptible  = true
     machine_type = "e2-medium"
 
-    tags = ["terraform-cloud","with","GKE"]
+    tags = ["terraformcloud","with","gke"]
 
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
     service_account = google_service_account.soner_service_account.email
