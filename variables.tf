@@ -3,7 +3,7 @@
 
 variable "regions_europe" {
     type        = list(string)
-    default     = ["europe-west1", "europe-west2"]
+    default     = ["europe-west1", "europe-west2", "europe-central2"]
     description = "List of regions in Europa"
 }
 
