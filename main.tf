@@ -75,7 +75,7 @@ resource "google_container_cluster" "primary" {
 }
 
 resource "google_container_node_pool" "primary_preemptible_nodes" {
-  name       = "tf-node-pool-gke"
+  name       = "tfnodepoolgke"
   location   = var.regions_europe[3]
   cluster    = google_container_cluster.primary.name
   node_count = 3
