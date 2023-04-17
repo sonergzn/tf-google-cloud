@@ -8,12 +8,6 @@ data "google_secret_manager_secret_version" "project_id" {
   version    = "latest"
 }
 
-provider "google" {
-  project     = var.gcloud_project_name
-  region      = var.regions_europe[0]
-  zone        = "europe-west1-b"
-}
-
 terraform {
     backend "remote"{
         organization = "SONER_ORG"
@@ -25,7 +19,7 @@ terraform {
 
 resource "google_service_account" "soner_service_account" {
   account_id   = "tfserviceaccount"
-  display_name = "Soner Service Account"
+  display_name = "Soner Service Account for Terraform <> GoogleCloud"
   project      = data.google_secret_manager_secret_version.project_id.secret_data
 }
 
@@ -61,7 +55,39 @@ resource "google_compute_instance" "micro_google_VM" {
 
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-    email  = google_service_account.soner_service_account.email
-    scopes = ["cloud-platform"]
+    email        = google_service_account.soner_service_account.email
+    scopes       = ["cloud-platform"]
+  }
+}
+
+#################### GKE ########################
+
+resource "google_container_cluster" "primary" {
+  name     = "tf-k8-cluster"
+  location = var.regions_europe[0]
+
+  # We can't create a cluster with no node pool defined, but we want to only use
+  # separately managed node pools. So we create the smallest possible default
+  # node pool and immediately delete it.
+  remove_default_node_pool = true
+  initial_node_count       = 3
+
+}
+
+resource "google_container_node_pool" "primary_preemptible_nodes" {
+  name       = "tf-node-pool-gke"
+  location   = var.regions_europe[0]
+  cluster    = google_container_cluster.primary.name
+  node_count = 3
+
+  node_config {
+    preemptible  = true
+    machine_type = "e2-medium"
+
+    tags = ["terraform-cloud","with","GKE"]
+
+    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
+    service_account = google_service_account.soner_service_account.email
+    #scopes       = ["cloud-platform"]
   }
 }

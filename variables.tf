@@ -23,3 +23,9 @@ variable "organization_name"{
     default   = "SONER_ORG"
     sensitive = true
 }
+
+variable "GOOGLE_CREDENTIALS" {
+  type = string
+  sensitive = true
+  description = "Value is coming from TF_Cloud ENV var called GOOGLE_CREDENTIALS"
+}
