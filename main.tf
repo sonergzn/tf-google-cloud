@@ -103,7 +103,7 @@ resource "kubernetes_persistent_volume_claim" "tfclaimk8" {
         storage = "5Gi"
       }
     }
-    volume_name = kubernetes_persistent_volume.k8_pcv.metadata.name
+    volume_name = "${kubernetes_persistent_volume.k8_pcv.metadata.0.name}"
   }
 }
 
