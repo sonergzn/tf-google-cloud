@@ -94,7 +94,7 @@ resource "google_container_node_pool" "primarypreemptiblesnodes" {
 
 resource "kubernetes_persistent_volume_claim" "tfclaimk8" {
   metadata {
-    name = "myTfClaimgke"
+    name = "mytfvlaimgke"
   }
   spec {
     access_modes = ["ReadWriteMany"]
@@ -103,7 +103,7 @@ resource "kubernetes_persistent_volume_claim" "tfclaimk8" {
         storage = "5Gi"
       }
     }
-    volume_name = "${kubernetes_persistent_volume.k8_pcv.metadata.0.name}"
+    volume_name = kubernetes_persistent_volume.k8_pcv.name
   }
 }
 
