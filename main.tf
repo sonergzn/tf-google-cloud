@@ -86,6 +86,9 @@ resource "kubernetes_namespace" "test-namespace" {
   metadata {
     name = "tf-test-namespace"
   }
+  annotations = {
+      "iam.gke.io/gcp-service-account" = "tfserviceaccount@serious-terra-383815.iam.gserviceaccount.com"
+  }
 }
 
 resource "google_container_cluster" "primary" {
