@@ -29,3 +29,7 @@ variable "GOOGLE_CREDENTIALS" {
   sensitive = true
   description = "Value is coming from TF_Cloud ENV var called GOOGLE_CREDENTIALS"
 }
+variable "KUBE_CONFIG_FILE" {
+    type      = string
+    sensitive = true
+}
