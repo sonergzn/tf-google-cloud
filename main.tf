@@ -94,7 +94,7 @@ resource "google_container_node_pool" "primarypreemptiblesnodes" {
 
 resource "kubernetes_persistent_volume_claim" "tfclaimk8" {
   metadata {
-    name = "myTfClaim_gke"
+    name = "myTfClaimgke"
   }
   spec {
     access_modes = ["ReadWriteMany"]
