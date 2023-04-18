@@ -2,6 +2,8 @@ module "outputs" {
   source = "./modules"
 }
 
+
+######################## DATA #############################
 data "google_secret_manager_secret_version" "project_id" {
   #provider   = google
   secret     = "project_id"
@@ -15,12 +17,20 @@ data "google_container_cluster" "primary" {
 
 data "google_client_config" "default" {}
 
+
+
+######################## TERRAFORM #############################
+
+
+
 provider "kubernetes" {
   #load_config_file       = "false"
   host                   = "https://${data.google_container_cluster.primary.endpoint}"
   token                  = data.google_client_config.default.access_token
   cluster_ca_certificate = base64decode(data.google_container_cluster.primary.master_auth[0].cluster_ca_certificate)
-  config_path            = var.KUBE_CONFIG_FILE
+  client_certificate     = base64decode(google_container_cluster.primary.master_auth[0].client_certificate)
+  client_key             = base64decode(google_container_cluster.primary.master_auth[0].client_key)
+  #config_path            = var.KUBE_CONFIG_FILE
 }
 
 terraform {
@@ -37,6 +47,12 @@ terraform {
     }
 }
 }
+
+
+
+
+######################## RESOURCES #############################
+
 
 
 resource "google_service_account" "soner_service_account" {
@@ -82,7 +98,11 @@ resource "google_compute_instance" "micro_google_VM" {
   }
 }
 
+
+
 #################### GKE ########################
+
+
 
 resource "kubernetes_namespace" "test-namespace" {
   metadata {
@@ -122,6 +142,19 @@ resource "google_container_node_pool" "primarypreemptiblesnodes" {
   }
 }
 
+resource "kubernetes_storage_class_v1" "tfstorageclass" {
+  metadata {
+    name = "terraform-storageclass"
+  }
+  storage_provisioner = "kubernetes.io/gce-pd"
+  reclaim_policy      = "Retain"
+  parameters = {
+      type = "pd-standard"
+  }
+
+   mount_options = ["file_mode=0700", "dir_mode=0777", "mfsymlinks", "uid=1000", "gid=1000", "nobrl", "cache=none"]
+}
+
 resource "kubernetes_persistent_volume_claim" "tfclaimk8" {
   metadata {
     name = "mytfvlaimgke"
@@ -139,12 +172,13 @@ resource "kubernetes_persistent_volume_claim" "tfclaimk8" {
 
 resource "kubernetes_persistent_volume" "k8_pcv" {
   metadata {
-    name = "tfk8pvc"
+    name = "tf-k8-pvc"
   }
   spec {
     capacity = {
-      storage = "10Gi"
+      storage = "5Gi"
     }
+    storage_class_name = kubernetes_storage_class_v1.tfstorageclass.metadata[0].name
     access_modes = ["ReadWriteMany"]
     persistent_volume_source {
       gce_persistent_disk {
