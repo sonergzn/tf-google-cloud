@@ -91,3 +91,35 @@ resource "google_container_node_pool" "primarypreemptiblesnodes" {
     #scopes       = ["cloud-platform"]
   }
 }
+
+resource "kubernetes_persistent_volume_claim" "tfclaimk8" {
+  metadata {
+    name = "myTfClaim_gke"
+  }
+  spec {
+    access_modes = ["ReadWriteMany"]
+    resources {
+      requests = {
+        storage = "5Gi"
+      }
+    }
+    volume_name = "${kubernetes_persistent_volume.k8_pcv.metadata.0.name}"
+  }
+}
+
+resource "kubernetes_persistent_volume" "k8_pcv" {
+  metadata {
+    name = "tfk8pvc"
+  }
+  spec {
+    capacity = {
+      storage = "10Gi"
+    }
+    access_modes = ["ReadWriteMany"]
+    persistent_volume_source {
+      gce_persistent_disk {
+        pd_name = "disktfgke"
+      }
+    }
+  }
+}
