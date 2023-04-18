@@ -8,6 +8,18 @@ data "google_secret_manager_secret_version" "project_id" {
   version    = "latest"
 }
 
+data "google_container_cluster" "primary" {
+  name     = google_container_cluster.primary.name
+  location = google_container_cluster.primary.location
+}
+
+data "google_client_config" "default" {}
+
+provider "kubernetes" {
+  host                   = "https://${data.google_container_cluster.primary.endpoint}"
+  token                  = data.google_client_config.default.access_token
+}
+
 terraform {
     backend "remote"{
         organization = "SONER_ORG"
@@ -15,7 +27,14 @@ terraform {
             name = "tf-google-cloud"
         }
     }
+    required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.0.0"
+    }
 }
+}
+
 
 resource "google_service_account" "soner_service_account" {
   account_id   = "tfserviceaccount"
@@ -61,6 +80,12 @@ resource "google_compute_instance" "micro_google_VM" {
 }
 
 #################### GKE ########################
+
+resource "kubernetes_namespace" "test-namespace" {
+  metadata {
+    name = "tf-test-namespace"
+  }
+}
 
 resource "google_container_cluster" "primary" {
   name     = "tfk8cluster"

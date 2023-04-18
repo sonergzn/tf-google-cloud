@@ -4,3 +4,4 @@ provider "google" {
   region      = var.regions_europe[0]
   zone        = "europe-west1-b"
 }
+
